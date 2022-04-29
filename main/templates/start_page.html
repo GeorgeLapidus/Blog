@@ -19,6 +19,20 @@
         </a>
         {% endfor %}
     </div>
+
+    {% block content %}
+        <div style="display: flex; justify-content: flex-start">
+        {% for post in posts %}
+            <div class="item_card" style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
+                <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
+                <p style="margin: 15px;">{{ post.title }}</p>
+                <p style="margin: 15px;">{{ post.briefdescription }}</p>
+                <p style="margin: 15px;">{{ post.like }}</p>
+            </div>
+            </a>
+        {% endfor %}
+        </div>
+    {% endblock %}
 </main>
 
 </body>

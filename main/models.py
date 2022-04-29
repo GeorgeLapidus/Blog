@@ -24,8 +24,8 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='images', blank=True)
     author = models.CharField(max_length=200, blank=True)
-    like = models.IntegerField()
-    view = models.IntegerField()
+    like = models.IntegerField(default=0, blank=True)
+    view = models.IntegerField(default=0, blank=True)
 
     class Meta:
         ordering = ['title']
@@ -33,7 +33,7 @@ class Post(models.Model):
         verbose_name_plural = 'Статьи'
 
     def __str__(self):
-        return self.name
+        return self.title
 
     def get_absolute_url(self):
         return reverse('main:post_detail', args=[self.id])
