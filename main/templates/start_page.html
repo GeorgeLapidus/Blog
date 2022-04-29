@@ -12,26 +12,29 @@
 <body>
 <main>
     <div style="display: flex; justify-content:flex-start; background-color: grey">
-        <a style="padding:15px; text-decoration: none; color:yellow">Главная</a>
+        <a style="padding:15px; text-decoration: none; color:black">БЛОГ ITEC</a>
+    </div>
+
+    <div style="display: flex; justify-content:flex-start; background-color: bisque">
+        <a href="{% url 'main:start_page' %}" style="padding:15px; text-decoration: none; color:black">Главная</a>
         {% for category in categories %}
-        <a style="padding:15px; text-decoration: none; color:yellow">
-            {{ category.title }}
-        </a>
+        <a href="{% url 'main:category_post' category.id %}" style="padding:15px; text-decoration: none; color:black">{{ category.title }}</a>
         {% endfor %}
     </div>
 
     {% block content %}
-        <div style="display: flex; justify-content: flex-start">
+    <div style="display: flex; justify-content: flex-start">
         {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black">
             <div class="item_card" style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
                 <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
                 <p style="margin: 15px;">{{ post.title }}</p>
                 <p style="margin: 15px;">{{ post.briefdescription }}</p>
                 <p style="margin: 15px;">{{ post.like }}</p>
             </div>
-            </a>
+        </a>
         {% endfor %}
-        </div>
+    </div>
     {% endblock %}
 </main>
 
