@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="{% static 'css/start_page.css' %}">
+</head>
+
+<body>
+<main>
+    <div style="display: flex; justify-content:flex-start; background-color: grey">
+        <a style="padding:15px; text-decoration: none; color:yellow">Главная</a>
+        {% for category in categories %}
+        <a style="padding:15px; text-decoration: none; color:yellow">
+            {{ category.title }}
+        </a>
+        {% endfor %}
+    </div>
+</main>
+
+</body>
+</html>
