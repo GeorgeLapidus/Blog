@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
-from main.models import Category, Post
+from .forms import CommentForm
+from .models import Category, Post, Comment
 
 
 def start_page(request):
@@ -13,8 +14,16 @@ def start_page(request):
 
 def post_detail(request, id):
     categories = Category.objects.all()
-    post = get_object_or_404(Post, id=id)
-    context = {'categories': categories, 'post': post}
+    post = Post.objects.get(id=id)
+    form = CommentForm()
+    if request.method == 'POST':
+        comment = Comment(text=request.POST.get("text"), post_id=id)
+        print (comment)
+        comment.save()
+        return render(request, 'success_add_comment.html')
+
+
+    context = {'categories': categories, 'post': post, 'form':form}
     return render(request, 'post_detail.html', context)
 
 

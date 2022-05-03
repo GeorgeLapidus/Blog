@@ -7,4 +7,13 @@
     <p style="margin: 15px;">{{ post.description }}</p>
     <p style="margin: 15px;">{{ post.like }}</p>
 </div>
+
+    {{ comments }}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button> Отправить</button>
+</form>
+
 {% endblock %}

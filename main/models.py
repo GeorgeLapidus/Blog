@@ -37,3 +37,17 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('main:post_detail', args=[self.id])
+
+
+class Comment(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Новость')
+    # user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Пользователь')
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    text = models.TextField(verbose_name='Текст комментария')
+    is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
+    likes = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['date_created']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
