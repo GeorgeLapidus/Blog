@@ -16,14 +16,14 @@ def post_detail(request, id):
     categories = Category.objects.all()
     post = Post.objects.get(id=id)
     form = CommentForm()
+    comments = Comment.objects.filter(is_publish='True', post_id=id)
     if request.method == 'POST':
         comment = Comment(text=request.POST.get("text"), post_id=id)
-        print (comment)
         comment.save()
         return render(request, 'success_add_comment.html')
 
 
-    context = {'categories': categories, 'post': post, 'form':form}
+    context = {'categories': categories, 'post': post, 'form':form, 'comments': comments}
     return render(request, 'post_detail.html', context)
 
 

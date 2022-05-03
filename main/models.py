@@ -43,7 +43,7 @@ class Comment(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Новость')
     # user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    text = models.TextField(verbose_name='Текст комментария')
+    text = models.TextField(verbose_name='Оставить свой комментарий')
     is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
     likes = models.IntegerField(default=0)
 

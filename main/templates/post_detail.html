@@ -8,9 +8,13 @@
     <p style="margin: 15px;">{{ post.like }}</p>
 </div>
 
-    {{ comments }}
+    {%  for comment in comments %}
+        <p><h4>{{ comment.text }}</h4></p>
+        <p>{{ comment.date_created }}</p>
+        <p>Like {{ comment.likes }} </p>
+    {% endfor %}
 
-<form action="" method="post">
+    <form action="" method="post">
     {% csrf_token %}
     {{form.as_p}}
     <button> Отправить</button>
