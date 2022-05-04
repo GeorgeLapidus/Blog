@@ -48,6 +48,6 @@ class Comment(models.Model):
     likes = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['date_created']
+        ordering = ['-is_publish', 'date_created']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
