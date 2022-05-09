@@ -35,8 +35,15 @@ def post_detail(request, id):
 @receiver(post_save, sender=Comment)
 def send_bot_message(sender, **kwargs):
     print("Оставили комментарий")
-
     # bot.send_message(CHANNEL_NAME, "Оставили комментарий")
+
+    send_mail(
+        'Оставили комментарий',
+        'Вам оставили комментарий на БЛОГ ITECH http://127.0.0.1:8000/',
+        'python.project2012@gmail.com',
+        ['python.project2012@gmail.com', 'shvedovska_vera@mail.ru'],
+        fail_silently=False)
+    print("Письмо отправлено с помощью сигнала")
 
 
 
