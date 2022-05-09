@@ -3,8 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import render, get_object_or_404
 from .forms import CommentForm
-from .models import Category, Post, Comment
-
+from .models import Category, Post, Comment, BlogUser
 
 def start_page(request):
     categories = Category.objects.all()
@@ -12,20 +11,21 @@ def start_page(request):
     context = {'categories': categories, 'posts': posts}
     return render(request, 'start_page.html', context)
 
-
 def post_detail(request, id):
+    """Фукция вывода детальной информации новости"""
+
     categories = Category.objects.all()
     post = Post.objects.get(id=id)
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
-    if request.method == 'POST':
-        comment = Comment(text=request.POST.get("text"), post_id=id)
-        comment.save()
-        return render(request, 'success_add_comment.html')
-    context = {'categories': categories, 'post': post, 'form':form, 'comments': comments}
+    if request.user.username:
+        user = BlogUser.objects.get(username=request.user.username)
+        if request.method == 'POST':
+            comment = Comment(text=request.POST.get("text"), post_id=id, user=user)
+            comment.save()
+            return render(request, 'success_add_comment.html')
+    context = {'categories': categories, 'post': post, 'form': form, 'comments': comments}
     return render(request, 'post_detail.html', context)
-
-
 
 
 # import telebot

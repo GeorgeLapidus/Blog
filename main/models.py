@@ -1,6 +1,8 @@
+from django.conf import settings
 from django.db import models
-
 from django.urls import reverse
+from account.models import BlogUser
+# from blog import settings
 
 
 class Category(models.Model):
@@ -40,8 +42,9 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    """Класс комментария к новости"""
     post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Новость')
-    # user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Оставить свой комментарий')
     is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
