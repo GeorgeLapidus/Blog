@@ -4,6 +4,10 @@ from django.dispatch import receiver
 from django.shortcuts import render, get_object_or_404
 from .forms import CommentForm
 from .models import Category, Post, Comment, BlogUser
+from .serializers import CategorySerializer, PostSerializer, CommentSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 
 def start_page(request):
     categories = Category.objects.all()
@@ -34,6 +38,8 @@ def post_detail(request, id):
 
 @receiver(post_save, sender=Comment)
 def send_bot_message(sender, **kwargs):
+    """Сигнал об оставленном комментарии"""
+
     print("Оставили комментарий")
     # bot.send_message(CHANNEL_NAME, "Оставили комментарий")
 
@@ -52,3 +58,55 @@ def category_post(request, category_id):
     posts = Post.objects.filter(category_id=category_id)
     context = {'categories': categories, 'posts': posts}
     return render(request, "category_post.html", context)
+
+
+@api_view(['GET'])
+def api_category(request):
+    """api_rest вывод всех категорий блога"""
+
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def api_post(request):
+    """api_rest вывод всех новостей"""
+
+    posts = Post.objects.all()
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def api_category_post(request):
+    """api_rest вывод новостей по категориям"""
+
+    categories = Category.objects.all()
+    spisok = []
+    for i in categories:
+        serializer = CategorySerializer(i)
+        rez = dict(serializer.data)
+        rez['posts'] = [PostSerializer(c).data for c in i.post_set.all()]
+        spisok.append(rez)
+    return Response(spisok)
+
+@api_view(['GET'])
+def api_comments(request):
+    """api_rest вывод всех комментариев"""
+
+    comments = Comment.objects.all()
+    serializer = CommentSerializer(comments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def api_post_comments(request):
+    """api_rest вывод комментариев к новости"""
+
+    posts = Post.objects.all()
+    spisok = []
+    for i in posts:
+        serializer = PostSerializer(i)
+        rez = dict(serializer.data)
+        rez['comments'] = [CommentSerializer(c).data for c in i.comment_set.all()]
+        spisok.append(rez)
+    return Response(spisok)
