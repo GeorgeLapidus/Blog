@@ -1,0 +1,17 @@
+{% extends "start_page.html" %}
+
+{% block content %}
+<h2>Авторизация</h2>
+{% if user.is_authenticated %}
+<h3>Вы выполнили вход ранее.</h3>
+
+{% else %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Войти">
+</form>
+
+{% endif %}
+
+{% endblock %}

@@ -48,6 +48,17 @@
         </a>
         {% endfor %}
     </div>
+    <div>
+        <form  style="background-color: grey" action="" method="POST">
+            {% csrf_token %}
+            <h3>Хочу получать уведомления о новых постах ITEC</h3>
+            {{ form.as_p }}
+            <button>Отправить</button>
+        </form>
+        <div>
+            {{ message }}
+        </div>
+    </div>
     {% endblock %}
 </main>
 

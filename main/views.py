@@ -1,14 +1,21 @@
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
-from .forms import CommentForm
-from .models import Category, Post, Comment
+from account.models import BlogUser
+from .forms import CommentForm, EmailsForm
+from .models import Category, Post, Comment, Emails
 
 
 def start_page(request):
     categories = Category.objects.all()
     posts = Post.objects.all()
-    context = {'categories': categories, 'posts': posts}
+    form = EmailsForm()
+    if request.method == 'POST':
+        new_email = EmailsForm(request.POST)
+        if new_email.is_valid():
+            new_email.save()
+            return render(request, 'start_page.html', {'categories': categories, 'posts': posts, 'form': form,'message': "Ваш email сохранен!"})
+    context = {'categories': categories, 'posts': posts, 'form': form}
     return render(request, 'start_page.html', context)
 
 

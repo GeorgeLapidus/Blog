@@ -51,3 +51,8 @@ class Comment(models.Model):
         ordering = ['date_created']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+
+class Emails(models.Model):
+    """Класс для хранения электронных адресов пользователей, которые хотят получать уведомления о новых постах"""
+    email = models.EmailField(blank=False)

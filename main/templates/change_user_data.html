@@ -1,0 +1,12 @@
+{% extends "start_page.html" %}
+
+{% block content %}
+
+<h2>Смена данных пользователя {{ user.username }}</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Изменить">
+</form>
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "start_page.html" %}
+
+{% block content %}
+<h2>Профиль</h2>
+
+<a href="{% url 'account:change_user_info' %}">Изменить данные пользователя</a>
+<a href="{% url 'account:change_user_password' %}">Изменить пароль</a>
+
+{% endblock %}
