@@ -28,6 +28,12 @@ def post_detail(request, id):
 
     categories = Category.objects.all()
     post = Post.objects.get(id=id)
+
+    'Счётчик просмотров'
+    if request.method == 'GET':
+        post.views += 1
+        post.save()
+
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
     if request.user.username:

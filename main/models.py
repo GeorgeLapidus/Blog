@@ -26,8 +26,8 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='images', blank=True)
     author = models.CharField(max_length=200, blank=True)
-    like = models.IntegerField(default=0, blank=True)
-    view = models.IntegerField(default=0, blank=True)
+    likes = models.IntegerField(default=0, blank=True)
+    views = models.IntegerField(default=0, blank=True)
 
     class Meta:
         ordering = ['title']
