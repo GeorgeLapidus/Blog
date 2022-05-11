@@ -6,11 +6,11 @@ from account.models import BlogUser
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, verbose_name="Название")
 
     class Meta:
         ordering = ['title']
-        verbose_name = 'Категория'
+        verbose_name = 'Категорию'
         verbose_name_plural = 'Категории'
 
     def __str__(self):
@@ -18,20 +18,20 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    briefdescription = models.CharField(max_length=400)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    image = models.ImageField(upload_to='images', blank=True)
-    author = models.CharField(max_length=200, blank=True)
-    likes = models.IntegerField(default=0, blank=True)
-    views = models.IntegerField(default=0, blank=True)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
+    title = models.CharField(max_length=200, verbose_name="Название")
+    description = models.TextField(verbose_name="Содержание")
+    briefdescription = models.CharField(max_length=400, verbose_name="Краткое содержание")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    image = models.ImageField(upload_to='images', blank=True, verbose_name="Изображение")
+    author = models.CharField(max_length=200, blank=True, verbose_name="Автор")
+    likes = models.IntegerField(default=0, blank=True, verbose_name="Лайки")
+    views = models.IntegerField(default=0, blank=True, verbose_name="Просмотры")
 
     class Meta:
         ordering = ['title']
-        verbose_name = 'Статья'
+        verbose_name = 'Статью'
         verbose_name_plural = 'Статьи'
 
     def __str__(self):
