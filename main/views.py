@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import render, get_object_or_404
 
-
+from account.models import BlogUser
 from .forms import CommentForm,EmailsForm
 from .models import Category,  Post, Comment
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
