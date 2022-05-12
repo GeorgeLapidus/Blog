@@ -73,3 +73,6 @@ class Emails(models.Model):
     class Meta:
         verbose_name = 'Адрес электронной почты'
         verbose_name_plural = 'Адреса электронной почты'
+
+    def __str__(self):
+        return self.email

@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 
 from account.models import BlogUser
 from .forms import CommentForm,EmailsForm
-from .models import Category,  Post, Comment
+from .models import Category, Post, Comment, Emails
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -67,6 +67,29 @@ def send_bot_message(sender, **kwargs):
         fail_silently=False)
     print("Письмо отправлено с помощью сигнала")
 
+
+@receiver(post_save, sender=Post)
+def listen_to_posts(sender, **kwargs):
+    """Сигнал для отправки уведомлений о выходе нового поста"""
+
+    emails_form = Emails.objects.all()
+    emails_register = BlogUser.objects.filter(send_message=True).exclude(is_superuser=True)
+    a = []
+    if emails_form:
+        for e in emails_form:
+            a.append(e.email)
+    if emails_register:
+        for e in emails_register:
+            a.append(e.email)
+    recipients = list(set(a))
+    subject = 'Новый пост в БЛОГЕ компании ITEC'
+    # html_message = render_to_string('message.html')
+    # plain_message = strip_tags(html_message)
+    plain_message = "Новый пост на сайте айтек"
+    from_email = 'python.project2012@gmail.com'
+    # send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+    send_mail(subject, plain_message, from_email, recipients)
+    print("Рассылка уведомлений")
 
 
 def category_post(request, category_id):
