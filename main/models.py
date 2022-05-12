@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from account.models import BlogUser
-# from blog import settings
 
 
 class Category(models.Model):
@@ -70,4 +68,8 @@ class Comment(models.Model):
 
 class Emails(models.Model):
     """Класс для хранения электронных адресов пользователей, которые хотят получать уведомления о новых постах"""
-    email = models.EmailField(blank=False)
+    email = models.EmailField(blank=False, verbose_name='Электронная почта')
+
+    class Meta:
+        verbose_name = 'Адрес электронной почты'
+        verbose_name_plural = 'Адреса электронной почты'
