@@ -5,7 +5,7 @@
     {% for post in posts %}
     <a href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black">
         <div class="item_card" style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
-            <img src="{{ post.images.url }}" alt="" style="width:300px; height:150px">
+            <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
             <p style="margin: 15px;">{{ post.title }}</p>
             <p style="margin: 15px;">{{ post.briefdescription }}</p>
             <p style="margin: 15px;">{{ post.likes }}</p>

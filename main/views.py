@@ -12,6 +12,7 @@ from rest_framework.response import Response
 
 
 def start_page(request):
+    """Функция вывода стартовой страницы"""
     categories = Category.objects.all()
     posts = Post.objects.all()
     form = EmailsForm()
@@ -28,6 +29,7 @@ def post_detail(request, id):
 
     categories = Category.objects.all()
     post = Post.objects.get(id=id)
+    post_additional_images = post.postadditionalimage_set.all()
 
     'Счётчик просмотров'
     if request.method == 'GET':
@@ -42,7 +44,7 @@ def post_detail(request, id):
             comment = Comment(text=request.POST.get("text"), post_id=id, user=user)
             comment.save()
             return render(request, 'success_add_comment.html')
-    context = {'categories': categories, 'post': post, 'form': form, 'comments': comments}
+    context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form, 'comments': comments}
     return render(request, 'post_detail.html', context)
 
 

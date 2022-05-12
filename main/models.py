@@ -6,6 +6,7 @@ from account.models import BlogUser
 
 
 class Category(models.Model):
+    """Класс категорий новостей"""
     title = models.CharField(max_length=200, verbose_name="Название")
 
     class Meta:
@@ -18,6 +19,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    """Класс новостей"""
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
     title = models.CharField(max_length=200, verbose_name="Название")
     description = models.TextField(verbose_name="Содержание")
@@ -30,7 +32,7 @@ class Post(models.Model):
     views = models.IntegerField(default=0, blank=True, verbose_name="Просмотры")
 
     class Meta:
-        ordering = ['title']
+        ordering = ['created']
         verbose_name = 'Статью'
         verbose_name_plural = 'Статьи'
 
@@ -39,6 +41,16 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('main:post_detail', args=[self.id])
+
+
+class PostAdditionalImage(models.Model):
+    """Класс дополнительных изображений к новостям"""
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Статья')
+    image = models.ImageField(upload_to='images', blank=True, verbose_name='Изображение')
+
+    class Meta:
+        verbose_name = 'Дополнительное изображение'
+        verbose_name_plural = 'Дополнительные изображения'
 
 
 class Comment(models.Model):
