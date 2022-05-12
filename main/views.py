@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 
 
 from .forms import CommentForm,EmailsForm
-from .models import Category,  Post, Comment, BlogUser
+from .models import Category,  Post, Comment
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
