@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from main.models import Category, Post, Comment, PostAdditionalImage, Emails
+from main.models import Category, Post, Comment, PostAdditionalImage, Emails, AnswerComment
 
 
 class PostAdditionalImageInline(admin.TabularInline):
@@ -19,4 +19,5 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Category)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment)
+admin.site.register(AnswerComment)
 admin.site.register(Emails)

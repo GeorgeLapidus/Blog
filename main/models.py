@@ -58,12 +58,30 @@ class Comment(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Оставить свой комментарий')
     is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
-    likes = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-is_publish', 'date_created']
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return self.text
+
+class AnswerComment(models.Model):
+    """Класс ответа на комментарий """
+    comment = models.ForeignKey('Comment', on_delete=models.CASCADE, verbose_name='Комментарий')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    text = models.TextField(verbose_name='Ответ')
+    is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
+
+    class Meta:
+        ordering = ['-is_publish', 'date_created']
+        verbose_name = 'Ответ на комментарий'
+        verbose_name_plural = 'Ответы на комментарий'
+
+    def __str__(self):
+        return self.text
 
 
 class Emails(models.Model):

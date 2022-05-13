@@ -4,8 +4,8 @@ from django.dispatch import receiver
 from django.shortcuts import render, get_object_or_404
 
 from account.models import BlogUser
-from .forms import CommentForm,EmailsForm
-from .models import Category, Post, Comment, Emails
+from .forms import CommentForm, EmailsForm, AnswerCommentForm
+from .models import Category, Post, Comment, Emails, AnswerComment
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -38,13 +38,14 @@ def post_detail(request, id):
 
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
+    answer_comments = AnswerComment.objects.filter(is_publish='True')
     if request.user.username:
         user = BlogUser.objects.get(username=request.user.username)
         if request.method == 'POST':
             comment = Comment(text=request.POST.get("text"), post_id=id, user=user)
             comment.save()
             return render(request, 'success_add_comment.html')
-    context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form, 'comments': comments}
+    context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form, 'comments': comments, 'answer_comments': answer_comments}
     return render(request, 'post_detail.html', context)
 
 
@@ -65,7 +66,7 @@ def send_bot_message(sender, **kwargs):
         'python.project2012@gmail.com',
         ['python.project2012@gmail.com', 'shvedovska_vera@mail.ru'],
         fail_silently=False)
-    print("Письмо отправлено с помощью сигнала")
+    print("Письмо отправлено с помощью сигнала - оставили комментарий")
 
 
 @receiver(post_save, sender=Post)
@@ -90,6 +91,34 @@ def listen_to_posts(sender, **kwargs):
     # send_mail(subject, plain_message, from_email, [to], html_message=html_message)
     send_mail(subject, plain_message, from_email, recipients)
     print("Рассылка уведомлений")
+
+
+def answer_comment(request, id):
+    form = AnswerCommentForm()
+    comment = Comment.objects.get(id=id)
+    if request.user.username:
+        user = BlogUser.objects.get(username=request.user.username)
+        if request.method == 'POST':
+            answer_comment = AnswerComment(text=request.POST.get("text"), comment_id=id, user=user)
+            answer_comment.save()
+            return render(request, 'success_add_comment.html')
+    context = {'form': form, 'comment': comment}
+    return render(request, "answer_comment.html", context)
+
+
+@receiver(post_save, sender=AnswerComment)
+def send_message_about_answer(sender, **kwargs):
+    """Сигнал об оставленном ответе на комментарии"""
+
+    print("Оставили ответ на комментарий")
+    send_mail(
+        'Оставили ответ на комментарий',
+        'Вам оставили ответ на комментарий на БЛОГ ITECH http://127.0.0.1:8000/',
+        'python.project2012@gmail.com',
+        ['python.project2012@gmail.com', 'shvedovska_vera@mail.ru'],
+        fail_silently=False)
+    print("Письмо отправлено с помощью сигнала - ответ на комментарий")
+
 
 
 def category_post(request, category_id):

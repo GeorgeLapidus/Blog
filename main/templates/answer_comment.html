@@ -1,0 +1,15 @@
+{% extends "start_page.html" %}
+
+{% block content %}
+<p><h3> Оставьте здесь Ваш ответ на:</h3></p>
+    <p><h4>Комментарий: {{ comment.text }}</h4></p>
+        <p>Пользователь: {{ comment.user }}</p>
+        <p>{{ comment.date_created }}</p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button> Отправить</button>
+    </form>
+
+{% endblock %}
