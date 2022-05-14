@@ -9,7 +9,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ['title']
-        verbose_name = 'Категорию'
+        verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
     def __str__(self):
@@ -19,19 +19,19 @@ class Category(models.Model):
 class Post(models.Model):
     """Класс новостей"""
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
-    title = models.CharField(max_length=200, verbose_name="Название")
+    title = models.CharField(max_length=200, unique=True, verbose_name="Название")
     description = models.TextField(verbose_name="Содержание")
     briefdescription = models.CharField(max_length=400, verbose_name="Краткое содержание")
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    image = models.ImageField(upload_to='images', blank=True, verbose_name="Изображение")
+    image = models.ImageField(upload_to='images', verbose_name="Изображение", blank=True)   ### Надо потом убрать blank=True !!!
     author = models.CharField(max_length=200, blank=True, verbose_name="Автор")
     likes = models.IntegerField(default=0, blank=True, verbose_name="Лайки")
     views = models.IntegerField(default=0, blank=True, verbose_name="Просмотры")
 
     class Meta:
         ordering = ['created']
-        verbose_name = 'Статью'
+        verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
 
     def __str__(self):
@@ -94,3 +94,17 @@ class Emails(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class Like(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Новость')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+
+    def __str__(self):
+        return "id: " + str(self.id)

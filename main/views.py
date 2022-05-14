@@ -1,11 +1,11 @@
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
 from account.models import BlogUser
 from .forms import CommentForm, EmailsForm, AnswerCommentForm
-from .models import Category, Post, Comment, Emails, AnswerComment
+from .models import Category, Post, Comment, Emails, AnswerComment, Like
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -34,6 +34,22 @@ def post_detail(request, id):
     'Счётчик просмотров'
     if request.method == 'GET':
         post.views += 1
+        post.save()
+
+    'Счётчик лайков'
+    if request.GET.get('Likes') == 'Likes':
+        if request.user.username:
+            user = BlogUser.objects.get(username=request.user.username)
+            category_id = post.category_id
+            like = Like.objects.filter(post_id=id, category_id=category_id, user=user)
+            if len(like) > 0:
+                like.delete()
+                post.likes -= 1
+            else:
+                like = Like(post_id=id, category_id=category_id, user=user)
+                like.save()
+                post.likes += 1
+        post.views -= 1
         post.save()
 
     form = CommentForm()

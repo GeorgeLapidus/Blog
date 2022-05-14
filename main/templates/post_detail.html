@@ -2,10 +2,15 @@
 
 {% block content %}
 <div style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
+    {% if post.image %}
     <img src="{{ post.image.url }}" style="width:300px; height:150px">
+    {% endif %}
     <p style="margin: 15px;">{{ post.title }}</p>
     <p style="margin: 15px;">{{ post.description }}</p>
-    <p style="margin: 15px;">Likes: {{ post.likes }}</p>
+    <form action="" method="GET" style="margin: 15px;">
+        {% csrf_token %}
+        <input type="submit" value="Likes" name="Likes"/>  {{ post.likes }}
+    </form>
     <p style="margin: 15px;">Views: {{ post.views }}</p>
 </div>
 <div style="margin: 20px;">
