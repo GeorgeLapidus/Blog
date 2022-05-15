@@ -110,6 +110,7 @@ def listen_to_posts(sender, **kwargs):
 
 
 def answer_comment(request, id):
+    """Функция ответа на комментарий"""
     form = AnswerCommentForm()
     comment = Comment.objects.get(id=id)
     if request.user.username:
