@@ -57,7 +57,7 @@ class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Оставить свой комментарий')
-    is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
+    is_publish = models.BooleanField(default=False, verbose_name='Опубликовать')
 
     class Meta:
         ordering = ['-is_publish', 'date_created']
@@ -73,7 +73,7 @@ class AnswerComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Ответ')
-    is_publish = models.BooleanField(default=False, verbose_name='Опубликовать на сайте')
+    is_publish = models.BooleanField(default=False, verbose_name='Опубликовать')
 
     class Meta:
         ordering = ['-is_publish', 'date_created']

@@ -20,9 +20,20 @@ class LikeAdmin(admin.ModelAdmin):
     list_display = ('post', 'category', 'user', 'created', 'id')
 
 
+class CommentAdmin(admin.ModelAdmin):
+    """Класс для админки модели Comment"""
+    list_display = ('text', 'post', 'user', 'date_created', 'is_publish')
+    list_filter = ('is_publish',)
+
+class AnswerCommentAdmin(admin.ModelAdmin):
+    """Класс для админки модели AnswerComment"""
+    list_display = ('text', 'comment', 'user', 'date_created', 'is_publish')
+    list_filter = ('is_publish',)
+
+
 admin.site.register(Category)
 admin.site.register(Post, PostAdmin)
-admin.site.register(Comment)
-admin.site.register(AnswerComment)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(AnswerComment, AnswerCommentAdmin)
 admin.site.register(Emails)
 admin.site.register(Like, LikeAdmin)

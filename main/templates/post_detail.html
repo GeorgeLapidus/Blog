@@ -32,7 +32,7 @@
         {%  endif %}
         {% for answer_comment in answer_comments %}
             {%  if answer_comment.comment_id == comment.id %}
-                <p><h4>Ответ на комментарий: {{ answer_comment.text }}</h4></p>
+                <p><h4>Ответ: {{ answer_comment.text }}</h4></p>
                 <p>Пользователь: {{ answer_comment.user }}</p>
                 <p>{{ answer_comment.date_created }}</p>
             {% endif %}
