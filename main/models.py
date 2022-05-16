@@ -31,8 +31,8 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['created']
-        verbose_name = 'Статья'
-        verbose_name_plural = 'Статьи'
+        verbose_name = 'Новость'
+        verbose_name_plural = 'Новости'
 
     def __str__(self):
         return self.title
@@ -43,7 +43,7 @@ class Post(models.Model):
 
 class PostAdditionalImage(models.Model):
     """Класс дополнительных изображений к новостям"""
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Статья')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Новость')
     image = models.ImageField(upload_to='images', blank=True, verbose_name='Изображение')
 
     class Meta:

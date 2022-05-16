@@ -28,29 +28,32 @@ def post_detail(request, id):
     """Фукция вывода детальной информации новости"""
 
     categories = Category.objects.all()
-    post = Post.objects.get(id=id)
+    post_info = Post.objects.filter(id=id)
+    post = post_info[0]
     post_additional_images = post.postadditionalimage_set.all()
 
     'Счётчик просмотров'
     if request.method == 'GET':
         post.views += 1
-        post.save()
 
-    'Счётчик лайков'
-    if request.GET.get('Likes') == 'Likes':
-        if request.user.username:
-            user = BlogUser.objects.get(username=request.user.username)
-            category_id = post.category_id
-            like = Like.objects.filter(post_id=id, category_id=category_id, user=user)
-            if len(like) > 0:
-                like.delete()
-                post.likes -= 1
-            else:
-                like = Like(post_id=id, category_id=category_id, user=user)
-                like.save()
-                post.likes += 1
-        post.views -= 1
-        post.save()
+        'Счётчик лайков'
+        if request.GET.get('Likes') == 'Likes':
+            if request.user.username:
+                user = BlogUser.objects.get(username=request.user.username)
+                category_id = post.category_id
+                like = Like.objects.filter(post_id=id, category_id=category_id, user=user)
+                if len(like) > 0:
+                    like.delete()
+                    post.likes -= 1
+                else:
+                    like = Like(post_id=id, category_id=category_id, user=user)
+                    like.save()
+                    post.likes += 1
+                post_info.update(likes=post.likes)
+            post.views -= 1
+
+        post_info.update(views=post.views)
+
 
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
