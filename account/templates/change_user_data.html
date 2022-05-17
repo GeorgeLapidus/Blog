@@ -3,9 +3,9 @@
 {% block content %}
 
 <h2>Смена данных пользователя {{ user.username }}</h2>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{form.as_p}}
+    {{ form.as_p }}
     <input type="submit" value="Изменить">
 </form>
 

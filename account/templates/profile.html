@@ -3,7 +3,28 @@
 {% block content %}
 <h2>Профиль</h2>
 
-<a href="{% url 'account:change_user_info' %}">Изменить данные пользователя</a>
+<h1>Текущие данные:</h1>
+<div>
+    <img src="{{ user.image.url }}" alt=""><br>
+    Логин: {{ user.username }}<br>
+    Электронная почта: {{ user.email }}<br>
+
+    {% if not user.first_name %}
+    Имя: Значение отсутствует <br>
+    {% else %}
+    Имя: {{ user.first_name }}<br>
+    {% endif %}
+
+    {% if not user.last_name %}
+    Фамилия: Значение отсутствует
+    {% else %}
+    Фамилия: {{ user.last_name }}<br>
+    {% endif %}
+
+</div>
+
+<a href="{% url 'account:change_user_data' %}">Изменить данные пользователя</a>
 <a href="{% url 'account:change_user_password' %}">Изменить пароль</a>
+
 
 {% endblock %}

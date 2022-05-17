@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 
 
 class RegistrationUserForm(forms.ModelForm):
-
     """Форма регистрации пользователя блога"""
 
     email = forms.EmailField(required=True, label="Электронная почта")
@@ -52,9 +51,8 @@ class RegistrationUserForm(forms.ModelForm):
         fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'send_message')
 
 class ChangeUserDataForm(forms.ModelForm):
-
     """Форма изменения ранее сохраненных данных пользователя блога"""
 
     class Meta:
         model = BlogUser
-        fields = ('username', 'email','first_name', 'last_name', 'send_message')
+        fields = ('username', 'email','first_name', 'last_name', 'send_message', 'image')

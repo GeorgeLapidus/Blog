@@ -13,6 +13,7 @@ from rest_framework.response import Response
 
 def start_page(request):
     """Функция вывода стартовой страницы"""
+
     categories = Category.objects.all()
     posts = Post.objects.all()
     form = EmailsForm()
@@ -20,9 +21,11 @@ def start_page(request):
         new_email = EmailsForm(request.POST)
         if new_email.is_valid():
             new_email.save()
-            return render(request, 'start_page.html', {'categories': categories, 'posts': posts, 'form': form,'message': "Ваш email сохранен!"})
+            return render(request, 'start_page.html',
+                          {'categories': categories, 'posts': posts, 'form': form, 'message': "Ваш email сохранен!"})
     context = {'categories': categories, 'posts': posts, 'form': form}
     return render(request, 'start_page.html', context)
+
 
 def post_detail(request, id):
     """Фукция вывода детальной информации новости"""
@@ -54,7 +57,6 @@ def post_detail(request, id):
 
         post_info.update(views=post.views)
 
-
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
     answer_comments = AnswerComment.objects.filter(is_publish='True')
@@ -64,7 +66,8 @@ def post_detail(request, id):
             comment = Comment(text=request.POST.get("text"), post_id=id, user=user)
             comment.save()
             return render(request, 'success_add_comment.html')
-    context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form, 'comments': comments, 'answer_comments': answer_comments}
+    context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form,
+               'comments': comments, 'answer_comments': answer_comments}
     return render(request, 'post_detail.html', context)
 
 
@@ -114,6 +117,7 @@ def listen_to_posts(sender, **kwargs):
 
 def answer_comment(request, id):
     """Функция ответа на комментарий"""
+
     form = AnswerCommentForm()
     comment = Comment.objects.get(id=id)
     if request.user.username:
@@ -140,7 +144,6 @@ def send_message_about_answer(sender, **kwargs):
     print("Письмо отправлено с помощью сигнала - ответ на комментарий")
 
 
-
 def category_post(request, category_id):
     categories = Category.objects.all()
     posts = Post.objects.filter(category_id=category_id)
@@ -155,6 +158,7 @@ def api_category(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def api_post(request):
@@ -178,6 +182,7 @@ def api_category_post(request):
         spisok.append(rez)
     return Response(spisok)
 
+
 @api_view(['GET'])
 def api_comments(request):
     """api_rest вывод всех комментариев"""
@@ -185,6 +190,7 @@ def api_comments(request):
     comments = Comment.objects.all()
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def api_post_comments(request):
@@ -198,4 +204,3 @@ def api_post_comments(request):
         rez['comments'] = [CommentSerializer(c).data for c in i.comment_set.all()]
         spisok.append(rez)
     return Response(spisok)
-
