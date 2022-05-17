@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'social_django',
 
     'main',
     'account',
@@ -66,6 +67,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -103,6 +106,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -137,3 +148,11 @@ EMAIL_HOST_USER = 'python.project2012@gmail.com'
 EMAIL_HOST_PASSWORD = 'Python2012p'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+# SOCIAL_AUTH_POSTGRES_JSONFIELD = True  #будем работать с POSTGRESQL (разрешает хранение данных поля типа JSONField)
+# SOCIAL_AUTH_VK_OAUTH2_KEY = 'X8rGwAjK6HE61zCWCZm7'
+SOCIAL_AUTH_VK_OAUTH2_KEY = '8169055'
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = 'b83a3685b83a3685b83a36855eb84690dabb83ab83a3685dab95f3c12ce1ad3a18b21ee'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'X8rGwAjK6HE61zCWCZm7'
+# SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']

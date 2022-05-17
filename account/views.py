@@ -17,7 +17,7 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     """Класс для выхода пользователя с аккаунта"""
-    template_name = "start_page.html"
+    template_name = "logout.html"
 
 
 @login_required
