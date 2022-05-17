@@ -21,6 +21,14 @@
     Фамилия: {{ user.last_name }}<br>
     {% endif %}
 
+    {% if user.send_message %}
+    Получать уведомления о новых постах: ДА
+    {% else %}
+    Получать уведомления о новых постах: НЕТ
+    {% endif %}
+
+
+
 </div>
 
 <a href="{% url 'account:change_user_data' %}">Изменить данные пользователя</a>

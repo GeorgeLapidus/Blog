@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-c3++*gjr8gy7*r-+d+o#jkwtz@b2ap9%*4#m1twm!lnhcb93i(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['itec.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'social_django',
+    # 'django-extensions',
 
     'main',
     'account',
@@ -108,12 +109,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
+    "social_core.backends.mailru.MRGOAuth2",
+    "social_core.backends.mailru.MailruOAuth2",
+    'social_core.backends.facebook.FacebookOAuth2',
 
     'django.contrib.auth.backends.ModelBackend',
 )
-
-
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -155,3 +156,20 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SOCIAL_AUTH_VK_OAUTH2_KEY = '8169055'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'X8rGwAjK6HE61zCWCZm7'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+
+SOCIAL_AUTH_MAILRU_KEY = '70c47a98642f4fc19fc8383689974a4b'
+SOCIAL_AUTH_MAILRU_SECRET = '8fa5acb6f3514c48a3cac08a958a8f9c'
+
+SOCIAL_AUTH_MAILRU_OAUTH2_KEY = '785686'
+SOCIAL_AUTH_MAILRU_OAUTH2_SECRET = 'c13e9e039170e24beb987e5f46dcb452'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '532299851943070' # Facebook App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '402a666772da994a798a5d7a5becb605' # Facebook App Secret
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+  'locale': 'ru_RU',
+  'fields': 'id, name, email'
+}
+SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.10'
