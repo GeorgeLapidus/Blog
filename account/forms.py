@@ -48,7 +48,7 @@ class RegistrationUserForm(forms.ModelForm):
 
     class Meta:
         model = BlogUser
-        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'send_message')
+        fields = ('username', 'email', 'password1', 'password2', 'send_message')
 
 class ChangeUserDataForm(forms.ModelForm):
     """Форма изменения ранее сохраненных данных пользователя блога"""

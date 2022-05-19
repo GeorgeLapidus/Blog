@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-c3++*gjr8gy7*r-+d+o#jkwtz@b2ap9%*4#m1twm!lnhcb93i(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['itec.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['blogitec.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'social_django',
-    # 'django-extensions',
+    # 'django_extensions',
 
     'main',
     'account',
@@ -164,8 +164,8 @@ SOCIAL_AUTH_MAILRU_SECRET = '8fa5acb6f3514c48a3cac08a958a8f9c'
 SOCIAL_AUTH_MAILRU_OAUTH2_KEY = '785686'
 SOCIAL_AUTH_MAILRU_OAUTH2_SECRET = 'c13e9e039170e24beb987e5f46dcb452'
 
-SOCIAL_AUTH_FACEBOOK_KEY = '532299851943070' # Facebook App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '402a666772da994a798a5d7a5becb605' # Facebook App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = '718061645901734' # Facebook App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '96f200b972d05be0359d2a35d657c037' # Facebook App Secret
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {

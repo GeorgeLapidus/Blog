@@ -18,7 +18,17 @@
     <h2> Войти через соцсети:</h2>
     <a href="{% url 'social:begin' 'vk-oauth2' %}">ВК</a>
     <a href="{% url 'social:begin' 'mailru-oauth2' %}">MAIL.RU</a>
-<!--    <a href="{% url 'social:begin' 'facebook' %}">Facebook</a>-->
+    <a href="{% url 'social:begin' 'facebook' %}">Facebook</a>
 </div>
+<br>
+<br>
+
+<a href="{% url 'account:reset_password' %}">Забыли пароль?</a>
+
+<br>
+<br>
+<br>
+<br>
+<a href="{% url 'account:register' %}">Регистрация</a>
 
 {% endblock %}
