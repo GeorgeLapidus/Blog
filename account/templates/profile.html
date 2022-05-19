@@ -16,7 +16,7 @@
     {% endif %}
 
     {% if not user.last_name %}
-    Фамилия: Значение отсутствует
+    Фамилия: Значение отсутствует<br>
     {% else %}
     Фамилия: {{ user.last_name }}<br>
     {% endif %}
@@ -26,12 +26,15 @@
     {% else %}
     Получать уведомления о новых постах: НЕТ
     {% endif %}
-
+    <br>
+    <br>
+    <br>
+    <br>
 
 
 </div>
 
-<a href="{% url 'account:change_user_data' %}">Изменить данные пользователя</a>
+<a href="{% url 'account:change_user_data' %}">Изменить данные пользователя</a><br>
 <a href="{% url 'account:change_user_password' %}">Изменить пароль</a>
 
 

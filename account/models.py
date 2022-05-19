@@ -9,3 +9,4 @@ class BlogUser(AbstractUser):
                                        verbose_name='Получать сообщения на электронную почту о новых постах')
     image = models.ImageField(upload_to="media", default='python.jpeg')
 
+

@@ -32,7 +32,7 @@ class RegisterUser(CreateView):
     model = BlogUser
     form_class = RegistrationUserForm
     template_name = "register.html"
-    success_url = reverse_lazy('main:start_page')
+    success_url = reverse_lazy('account:login')
 
 
 class RegisterDoneView(TemplateView):

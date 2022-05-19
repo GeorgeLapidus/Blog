@@ -112,6 +112,7 @@ AUTHENTICATION_BACKENDS = (
     "social_core.backends.mailru.MRGOAuth2",
     "social_core.backends.mailru.MailruOAuth2",
     'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
 
     'django.contrib.auth.backends.ModelBackend',
 )

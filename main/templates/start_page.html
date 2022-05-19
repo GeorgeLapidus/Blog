@@ -17,8 +17,8 @@
 
     </div>
     {% if user.is_authenticated %}
-    <div>
-        <a href="{% url 'account:profile' %}">Профиль</a>
+    <div style="padding-left: 1600px">
+        <a  href="{% url 'account:profile' %}">{{ user.username }}<img style='width:50px; border-radius:30px'  src="{{ user.image.url }}" alt=""></a>
         <a href="{% url 'account:logout' %}">Выйти</a>
     </div>
     {% else %}
