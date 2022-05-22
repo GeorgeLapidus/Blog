@@ -1,27 +1,52 @@
 from rest_framework import serializers
 
-class CategorySerializer(serializers.Serializer):
-    """Сериализатор для модели Категория"""
-    title = serializers.CharField(max_length=200)
+from .models import Category, Post, Comment
 
 
-class PostSerializer(serializers.Serializer):
-    """Сериализатор для модели Новоти"""
-    category = serializers.CharField(max_length=50)
-    title = serializers.CharField(max_length=200)
-    description = serializers.CharField(max_length=1000)
-    briefdescription = serializers.CharField(max_length=400)
-    created = serializers.DateTimeField()
-    updated = serializers.DateTimeField()
-    author = serializers.CharField(max_length=200)
-    like = serializers.IntegerField()
-    view = serializers.IntegerField()
+class CategoryModelSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Категория через ModelSerializer"""
 
-class CommentSerializer(serializers.Serializer):
-    """Сериализатор для модели Комментарии"""
-    post = serializers.CharField(max_length=50)
-    user = serializers.CharField(max_length=50)
-    date_created = serializers.DateTimeField()
-    text = serializers.CharField(max_length=1000)
-    is_publish = serializers.BooleanField()
-    likes = serializers.IntegerField()
+    def create(self, validated_data):
+        return Category.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.id = validated_data.get('id', instance.id)
+        instance.title = validated_data.get('title', instance.title)
+        instance.save()
+        return instance
+
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+
+class PostModelSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Новости через ModelSerializer"""
+
+    category = CategoryModelSerializer()
+
+    def create(self, validated_data):
+        category_data = validated_data.pop("category")
+        category = Category.objects.create(**category_data)
+        # category, s = Category.objects.get_or_create(**category_data)
+        post = Post.objects.create(category=category, **validated_data)
+        return post
+
+
+
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+class CommentModelSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Комментарии через ModelSerializer"""
+
+    post = PostModelSerializer()
+
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+

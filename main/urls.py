@@ -1,7 +1,7 @@
 from django.urls import path
 
-from main.views import start_page, post_detail, category_post, api_category, api_post, api_category_post, api_comments, \
-    api_post_comments, answer_comment
+from main.views import start_page, post_detail, category_post, \
+    answer_comment, CategoryAll, PostAll, CommentAll, PostOne, CommentByPost, CategoryOne, CommentOne
 
 app_name = "main"
 
@@ -11,10 +11,14 @@ urlpatterns = [
     path('category_post/<int:category_id>', category_post, name="category_post"),
     path('answer_comment/<int:id>', answer_comment, name="answer_comment"),
 
-    path('api_category', api_category, name="api_category"),
-    path('api_post', api_post, name="api_post"),
-    path('api_category_post', api_category_post, name="api_category_post"),
-    path('api_comments', api_comments, name="api_comments"),
-    path('api_post_comments', api_post_comments, name="api_post_comments"),
+    path('api_category_all', CategoryAll.as_view(), name="api_category_all"),
+    path('api_category_all/<int:id>', CategoryAll.as_view(), name="api_category_all"),
+    path('api_category_one/<int:id>', CategoryOne.as_view(), name="api_category_one"),
+    path('api_post_all', PostAll.as_view(), name="api_post_all"),
+    path('api_post_one/<int:id>', PostOne.as_view(), name="api_post_one"),
+    path('api_comment_by_post/<int:id>', CommentByPost.as_view(), name="api_comment_by_post"),
+    path('api_comment_all', CommentAll.as_view(), name="api_comment_all"),
+    path('api_comment_one/<int:id>', CommentOne.as_view(), name="api_comment_one"),
+
 
 ]

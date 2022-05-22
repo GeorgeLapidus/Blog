@@ -1,37 +1,37 @@
 {% extends "start_page.html" %}
 
 {% block content %}
-<div style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
-    {% if post.image %}
-    <img src="{{ post.image.url }}" style="width:300px; height:150px">
-    {% endif %}
-    <p style="margin: 15px;">{{ post.title }}</p>
-    <p style="margin: 15px;">{{ post.description }}</p>
-    <form action="" method="GET" style="margin: 15px;">
-        {% csrf_token %}
-        <input type="submit" value="Likes" name="Likes"/>  {{ post.likes }}
-    </form>
-    <p style="margin: 15px;">Views: {{ post.views }}</p>
-</div>
-<div style="margin: 20px;">
-    {% if post_additional_images %}
-    {% for additional_image in post_additional_images %}
-    <img src="{{ additional_image.image.url }}" style="width:300px; height:150px">
-    {% endfor %}
-    {% endif %}
-</div>
+    <div style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
+        {% if post.image %}
+            <img src="{{ post.image.url }}" style="width:300px; height:150px">
+        {% endif %}
+        <p style="margin: 15px;">{{ post.title }}</p>
+        <p style="margin: 15px;">{{ post.description }}</p>
+        <form action="" method="GET" style="margin: 15px;">
+            {% csrf_token %}
+            <input type="submit" value="Likes" name="Likes"/> {{ post.likes }}
+        </form>
+        <p style="margin: 15px;">Views: {{ post.views }}</p>
+    </div>
+    <div style="margin: 20px;">
+        {% if post_additional_images %}
+            {% for additional_image in post_additional_images %}
+                <img src="{{ additional_image.image.url }}" style="width:300px; height:150px">
+            {% endfor %}
+        {% endif %}
+    </div>
 
     {% for comment in comments %}
-       <div style=" width: 300px; background: slategrey;">
-        <p><h4>Комментарий: {{ comment.text }}</h4></p>
-        <p>Пользователь: {{ comment.user }}</p>
-        <p>{{ comment.date_created }}</p>
-       </div>
-        {%  if user.is_authenticated %}
-            <p><h5> <a href="{% url 'main:answer_comment' comment.id %}">Ответить на комментарий </a></h5></p>
-        {%  endif %}
+        <div style=" width: 300px; background: slategrey;">
+            <p><h4>Комментарий: {{ comment.text }}</h4></p>
+            <p>Пользователь: {{ comment.user }}</p>
+            <p>{{ comment.date_created }}</p>
+        </div>
+        {% if user.is_authenticated %}
+            <p><h5><a href="{% url 'main:answer_comment' comment.id %}">Ответить на комментарий </a></h5></p>
+        {% endif %}
         {% for answer_comment in answer_comments %}
-            {%  if answer_comment.comment_id == comment.id %}
+            {% if answer_comment.comment_id == comment.id %}
                 <p><h4>Ответ: {{ answer_comment.text }}</h4></p>
                 <p>Пользователь: {{ answer_comment.user }}</p>
                 <p>{{ answer_comment.date_created }}</p>
@@ -40,14 +40,14 @@
 
     {% endfor %}
 
-    {%  if user.is_authenticated %}
+    {% if user.is_authenticated %}
         <form action="" method="post">
             {% csrf_token %}
-            {{form.as_p}}
+            {{ form.as_p }}
             <button> Отправить</button>
         </form>
     {% else %}
         <p><h5>*Вы можете ответить или оставить свой комментарий, если авторизуетесь</h5></p>
-    {%  endif %}
+    {% endif %}
 
 {% endblock %}
