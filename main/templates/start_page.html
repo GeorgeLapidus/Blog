@@ -30,6 +30,7 @@
 
     <div style="display: flex; justify-content:flex-start; background-color: bisque">
         <a href="{% url 'main:start_page' %}" style="padding:15px; text-decoration: none; color:black">Главная</a>
+        <a href="{% url 'main:popular_posts' %}" style="padding:15px; text-decoration: none; color:black">Популярное</a>
         {% for category in categories %}
         <a href="{% url 'main:category_post' category.id %}" style="padding:15px; text-decoration: none; color:black">{{ category.title }}</a>
         {% endfor %}

@@ -1,8 +1,7 @@
 from django.urls import path
 
 from main.views import start_page, post_detail, category_post, answer_comment, \
-    CategoriesList, PostsAllList, PostView, PostsByCategoryList, PostDetailedView
-
+    CategoriesList, PostsAllList, PostView, PostsByCategoryList, PostDetailedView, popular_posts
 
 app_name = "main"
 
@@ -10,6 +9,7 @@ urlpatterns = [
     path('', start_page, name="start_page"),
     path('post_detail/<int:id>', post_detail, name="post_detail"),
     path('category_post/<int:category_id>', category_post, name="category_post"),
+    path('popular_posts/', popular_posts, name="popular_posts"),
     path('answer_comment/<int:id>', answer_comment, name="answer_comment"),
 
     path('api/categories_list/', CategoriesList.as_view()),

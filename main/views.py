@@ -1,3 +1,5 @@
+import random
+
 import generics as generics
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
@@ -33,12 +35,20 @@ def start_page(request):
 
 
 def post_detail(request, id):
-    """Фукция вывода детальной информации новости"""
-
+    """Фукция вывода детальной информации статьи"""
     categories = Category.objects.all()
     post_info = Post.objects.filter(id=id)
     post = post_info[0]
     post_additional_images = post.postadditionalimage_set.all()
+    category_id = post.category_id
+
+    'Показ 3-ёх случайных похожих статей'
+    category_posts = list(Post.objects.filter(category_id=category_id))
+    category_posts.remove(post)
+    category_posts_count = len(category_posts)
+    if category_posts_count > 3:
+        category_posts_count = 3
+    category_random_posts = random.sample(category_posts, category_posts_count)
 
     'Счётчик просмотров'
     if request.method == 'GET':
@@ -48,7 +58,6 @@ def post_detail(request, id):
         if request.GET.get('Likes') == 'Likes':
             if request.user.username:
                 user = BlogUser.objects.get(username=request.user.username)
-                category_id = post.category_id
                 like = Like.objects.filter(post_id=id, category_id=category_id, user=user)
                 if len(like) > 0:
                     like.delete()
@@ -72,7 +81,7 @@ def post_detail(request, id):
             comment.save()
             return render(request, 'success_add_comment.html')
     context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form,
-               'comments': comments, 'answer_comments': answer_comments}
+               'comments': comments, 'answer_comments': answer_comments, 'category_random_posts': category_random_posts}
     return render(request, 'post_detail.html', context)
 
 
@@ -154,6 +163,13 @@ def category_post(request, category_id):
     posts = Post.objects.filter(category_id=category_id)
     context = {'categories': categories, 'posts': posts}
     return render(request, "category_post.html", context)
+
+
+def popular_posts(request):
+    categories = Category.objects.all()
+    posts = Post.objects.all().order_by('-views', '-likes')
+    context = {'categories': categories, 'posts': posts}
+    return render(request, "popular_posts.html", context)
 
 
 ###### REST API ##########

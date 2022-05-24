@@ -50,4 +50,22 @@
         <p><h5>*Вы можете ответить или оставить свой комментарий, если авторизуетесь</h5></p>
     {% endif %}
 
+    {% if category_random_posts %}
+    Похожие статьи:
+    <div style="display: flex; justify-content: flex-start">
+        {% for post in category_random_posts %}
+        <a href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black">
+            <div class="item_card" style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
+                {% endif %}
+                <p style="margin: 15px;">{{ post.title }}</p>
+                <p style="margin: 15px;">{{ post.briefdescription }}</p>
+                <p style="margin: 15px;">Likes: {{ post.likes }}</p>
+                <p style="margin: 15px;">Views: {{ post.views }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
 {% endblock %}

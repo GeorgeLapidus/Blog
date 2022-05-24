@@ -4,7 +4,7 @@ from django.urls import reverse
 
 
 class Category(models.Model):
-    """Класс категорий новостей"""
+    """Класс категорий статей"""
     title = models.CharField(max_length=200, verbose_name="Название")
 
     class Meta:
@@ -17,22 +17,22 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    """Класс новостей"""
+    """Класс статей"""
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
     title = models.CharField(max_length=200, unique=True, verbose_name="Название")
     description = models.TextField(verbose_name="Содержание")
     briefdescription = models.CharField(max_length=400, verbose_name="Краткое содержание")
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-    image = models.ImageField(upload_to='images', verbose_name="Изображение", blank=True)   ### Надо потом убрать blank=True !!!
+    image = models.ImageField(upload_to='images', verbose_name="Изображение")
     author = models.CharField(max_length=200, blank=True, verbose_name="Автор")
     likes = models.IntegerField(default=0, blank=True, verbose_name="Лайки")
     views = models.IntegerField(default=0, blank=True, verbose_name="Просмотры")
 
     class Meta:
         ordering = ['created']
-        verbose_name = 'Новость'
-        verbose_name_plural = 'Новости'
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
 
     def __str__(self):
         return self.title
@@ -42,8 +42,8 @@ class Post(models.Model):
 
 
 class PostAdditionalImage(models.Model):
-    """Класс дополнительных изображений к новостям"""
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Новость')
+    """Класс дополнительных изображений к статьям"""
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Статья')
     image = models.ImageField(upload_to='images', blank=True, verbose_name='Изображение')
 
     class Meta:
@@ -52,8 +52,8 @@ class PostAdditionalImage(models.Model):
 
 
 class Comment(models.Model):
-    """Класс комментария к новости"""
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Новость')
+    """Класс комментария к статье"""
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Статья')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Оставить свой комментарий')
@@ -97,7 +97,7 @@ class Emails(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Новость')
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Статья')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
