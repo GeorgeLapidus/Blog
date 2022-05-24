@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'social_django',
-    # 'django_extensions',
     'corsheaders',
 
     'main',

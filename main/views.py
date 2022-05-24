@@ -1,15 +1,19 @@
+import generics as generics
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import render
-from rest_framework.views import APIView
+# from rest_framework.views import APIView
+from rest_framework import generics
 
 from account.models import BlogUser
 from .forms import CommentForm, EmailsForm, AnswerCommentForm
 from .models import Category, Post, Comment, Emails, AnswerComment, Like
-from .serializers import CategoryModelSerializer, PostModelSerializer, CommentModelSerializer
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+# from .serializers import CategoryModelSerializer, PostModelSerializer, CommentModelSerializer
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+from .serializers import CategorySerializer, PostSerializer, PostsAllSerializer, CategoryDetailSerializer, \
+    PostDetailedSerializer
 
 
 def start_page(request):
@@ -153,86 +157,35 @@ def category_post(request, category_id):
 
 
 ###### REST API ##########
-class CategoryAll(APIView):
-    """api_rest вывод всех категорий блога (get), добавление категории (post), обновление категории (put)"""
 
-    def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategoryModelSerializer(categories, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = CategoryModelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
-
-    def put(self, request):
-        categories = Category.objects.all()
-        serializer = CategoryModelSerializer(categories, many=True)
-        instance = Category.objects.get(id=request.data.get("id"))
-        s = CategoryModelSerializer(instance, data=request.data)
-        if s.is_valid():
-            s.save()
-        return Response(serializer.data)
+class CategoriesList(generics.ListAPIView):
+    """вывод всех категорий на главной странице"""
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
-
-class CategoryOne(APIView):
-    """api_rest вывод одной новости блога"""
-
-    def get(self, request, id):
-        category = Category.objects.get(id=id)
-        serializer = CategoryModelSerializer(category)
-        return Response(serializer.data)
-
-class PostAll(APIView):
-    """api_rest вывод всех новостей блога"""
-
-    def get(self, request):
-        posts = Post.objects.all()
-        serializer = PostModelSerializer(posts, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = PostModelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(serializer.data)
+class PostsAllList(generics.ListAPIView):
+    """список всех постов на главной странице"""
+    queryset = Post.objects.all()
+    serializer_class = PostsAllSerializer
 
 
-class PostOne(APIView):
-    """api_rest вывод одной новости блога"""
-
-    def get(self, request, id):
-        post = Post.objects.get(id=id)
-        serializer = PostModelSerializer(post)
-        return Response(serializer.data)
+class PostView(generics.RetrieveAPIView):
+    """информация о посте без коммнетарием и лайков"""
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
-class CommentByPost(APIView):
-    """api_rest вывод всех комментариев по id новости"""
-
-    def get(self, request, id):
-        comments = Post.objects.get(id=id).comment_set.all()
-        serializer = CommentModelSerializer(comments, many=True)
-        return Response(serializer.data)
+class PostsByCategoryList(generics.RetrieveAPIView):
+    """все посты конкретной категории"""
+    queryset = Category.objects.all()
+    serializer_class = CategoryDetailSerializer
 
 
+class PostDetailedView(generics.RetrieveAPIView):
+    """пост с комментариями и ответами на комментарий"""
+    queryset = Post.objects.all()
+    serializer_class = PostDetailedSerializer
 
-class CommentAll(APIView):
-    """api_rest вывод всех комментариев блога"""
 
-    def get(self, request):
-        comments = Comment.objects.all()
-        serializer = CommentModelSerializer(comments, many=True)
-        return Response(serializer.data)
-
-class CommentOne(APIView):
-    """api_rest вывод одного комментария"""
-
-    def get(self, request, id):
-        comments = Comment.objects.get(id=id)
-        serializer = CommentModelSerializer(comments)
-        return Response(serializer.data)
 

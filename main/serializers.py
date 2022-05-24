@@ -1,52 +1,72 @@
 from rest_framework import serializers
 
-from .models import Category, Post, Comment
+from .models import Category, Post, Comment, AnswerComment
 
 
-class CategoryModelSerializer(serializers.ModelSerializer):
-    """Сериализатор для модели Категория через ModelSerializer"""
-
-    def create(self, validated_data):
-        return Category.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.id = validated_data.get('id', instance.id)
-        instance.title = validated_data.get('title', instance.title)
-        instance.save()
-        return instance
-
+class CategorySerializer(serializers.ModelSerializer):
+    """сериализатор для вывода всех категорий"""
 
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ['title', ]
 
 
-
-class PostModelSerializer(serializers.ModelSerializer):
-    """Сериализатор для модели Новости через ModelSerializer"""
-
-    category = CategoryModelSerializer()
-
-    def create(self, validated_data):
-        category_data = validated_data.pop("category")
-        category = Category.objects.create(**category_data)
-        # category, s = Category.objects.get_or_create(**category_data)
-        post = Post.objects.create(category=category, **validated_data)
-        return post
-
-
+class PostsAllSerializer(serializers.ModelSerializer):
+    """сериализатор для вывода всех постов"""
 
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ['title', 'briefdescription', 'created', 'image', 'views', ]
 
-class CommentModelSerializer(serializers.ModelSerializer):
-    """Сериализатор для модели Комментарии через ModelSerializer"""
 
-    post = PostModelSerializer()
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    """сериализатор для вывода постов у конкретной категории"""
+    post_set = PostsAllSerializer(many=True)
+
+    class Meta:
+        model = Category
+        fields = ['post_set', ]
+
+
+class PostSerializer(serializers.ModelSerializer):
+    """сериализатор для конкретного поста"""
+
+    class Meta:
+        model = Post
+        fields = ['title', 'description', 'created', 'image', 'views', ]
+
+
+class AnswerCommentSerializer(serializers.ModelSerializer):
+    """сериализатор для вывода ответов на комментарий"""
+
+    class Meta:
+        model = AnswerComment
+        fields = ['user', 'date_created', 'text']
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """сериализатор для вывода комментрариев и ответов на комментарий(прошедших модерацию)"""
+    answercomment_set = serializers.SerializerMethodField('get_answers')
+
+    def get_answers(self, comment):
+        qs = AnswerComment.objects.filter(is_publish=True, comment=comment)
+        serializer = AnswerCommentSerializer(instance=qs, many=True)
+        return serializer.data
 
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['user', 'date_created', 'text', 'answercomment_set']
 
 
+class PostDetailedSerializer(serializers.ModelSerializer):
+    """сериализатор для вывода конкретного поста с комментариями и ответами к нему(прошедших модерацию)"""
+    comment_set = serializers.SerializerMethodField('get_comments')
+
+    def get_comments(self, post):
+        qs = Comment.objects.filter(is_publish=True, post=post)
+        serializer = CommentSerializer(instance=qs, many=True)
+        return serializer.data
+
+    class Meta:
+        model = Post
+        fields = ['title', 'description', 'created', 'image', 'views', 'comment_set']
