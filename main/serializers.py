@@ -41,7 +41,7 @@ class AnswerCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnswerComment
-        fields = ['user', 'date_created', 'text']
+        fields = ['date_created', 'text']
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['user', 'date_created', 'text', 'answercomment_set']
+        fields = ['date_created', 'text', 'answercomment_set']
 
 
 class PostDetailedSerializer(serializers.ModelSerializer):

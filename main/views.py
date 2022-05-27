@@ -74,12 +74,11 @@ def post_detail(request, id):
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
     answer_comments = AnswerComment.objects.filter(is_publish='True')
-    if request.user.username:
-        user = BlogUser.objects.get(username=request.user.username)
-        if request.method == 'POST':
-            comment = Comment(text=request.POST.get("text"), post_id=id, user=user)
-            comment.save()
-            return render(request, 'success_add_comment.html')
+
+    if request.method == 'POST':
+        comment = Comment(text=request.POST.get("text"), post_id=id)
+        comment.save()
+        return render(request, 'success_add_comment.html')
     context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form,
                'comments': comments, 'answer_comments': answer_comments, 'category_random_posts': category_random_posts}
     return render(request, 'post_detail.html', context)
@@ -134,12 +133,10 @@ def answer_comment(request, id):
 
     form = AnswerCommentForm()
     comment = Comment.objects.get(id=id)
-    if request.user.username:
-        user = BlogUser.objects.get(username=request.user.username)
-        if request.method == 'POST':
-            answer_comment = AnswerComment(text=request.POST.get("text"), comment_id=id, user=user)
-            answer_comment.save()
-            return render(request, 'success_add_comment.html')
+    if request.method == 'POST':
+        answer_comment = AnswerComment(text=request.POST.get("text"), comment_id=id)
+        answer_comment.save()
+        return render(request, 'success_add_comment.html')
     context = {'form': form, 'comment': comment}
     return render(request, "answer_comment.html", context)
 

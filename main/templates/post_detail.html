@@ -24,31 +24,23 @@
     {% for comment in comments %}
         <div style=" width: 300px; background: slategrey;">
             <p><h4>Комментарий: {{ comment.text }}</h4></p>
-            <p>Пользователь: {{ comment.user }}</p>
             <p>{{ comment.date_created }}</p>
         </div>
-        {% if user.is_authenticated %}
             <p><h5><a href="{% url 'main:answer_comment' comment.id %}">Ответить на комментарий </a></h5></p>
-        {% endif %}
         {% for answer_comment in answer_comments %}
             {% if answer_comment.comment_id == comment.id %}
                 <p><h4>Ответ: {{ answer_comment.text }}</h4></p>
-                <p>Пользователь: {{ answer_comment.user }}</p>
                 <p>{{ answer_comment.date_created }}</p>
             {% endif %}
         {% endfor %}
 
     {% endfor %}
 
-    {% if user.is_authenticated %}
         <form action="" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button> Отправить</button>
         </form>
-    {% else %}
-        <p><h5>*Вы можете ответить или оставить свой комментарий, если авторизуетесь</h5></p>
-    {% endif %}
 
     {% if category_random_posts %}
     Похожие статьи:

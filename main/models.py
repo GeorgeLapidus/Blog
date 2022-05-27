@@ -54,7 +54,6 @@ class PostAdditionalImage(models.Model):
 class Comment(models.Model):
     """Класс комментария к статье"""
     post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Статья')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Оставить свой комментарий')
     is_publish = models.BooleanField(default=False, verbose_name='Опубликовать')
@@ -70,7 +69,6 @@ class Comment(models.Model):
 class AnswerComment(models.Model):
     """Класс ответа на комментарий """
     comment = models.ForeignKey('Comment', on_delete=models.CASCADE, verbose_name='Комментарий')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     text = models.TextField(verbose_name='Ответ')
     is_publish = models.BooleanField(default=False, verbose_name='Опубликовать')

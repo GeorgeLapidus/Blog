@@ -22,13 +22,13 @@ class LikeAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     """Класс для админки модели Comment"""
-    list_display = ('text', 'post', 'user', 'date_created', 'is_publish')
+    list_display = ('text', 'post', 'date_created', 'is_publish')
     list_filter = ('is_publish',)
     list_editable = ('is_publish',)
 
 class AnswerCommentAdmin(admin.ModelAdmin):
     """Класс для админки модели AnswerComment"""
-    list_display = ('text', 'comment', 'user', 'date_created', 'is_publish')
+    list_display = ('text', 'comment', 'date_created', 'is_publish')
     list_filter = ('is_publish',)
     list_editable = ('is_publish',)
 
