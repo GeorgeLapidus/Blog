@@ -2,9 +2,11 @@
 
 {% block content %}
     <div style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
-        {% if post.image %}
+        <div style="width:300px; height:150px;">
+            {% if post.image %}
             <img src="{{ post.image.url }}" style="width:300px; height:150px">
-        {% endif %}
+            {% endif %}
+        </div>
         <p style="margin: 15px;">{{ post.title }}</p>
         <p style="margin: 15px;">{{ post.description }}</p>
         <form action="" method="GET" style="margin: 15px;">
@@ -21,6 +23,7 @@
         {% endif %}
     </div>
 
+<div style="margin: 20px;">
     {% for comment in comments %}
         <div style=" width: 300px; background: slategrey;">
             <p><h4>Комментарий: {{ comment.text }}</h4></p>
@@ -41,23 +44,26 @@
             {{ form.as_p }}
             <button> Отправить</button>
         </form>
+</div>
 
     {% if category_random_posts %}
-    Похожие статьи:
-    <div style="display: flex; justify-content: flex-start">
-        {% for post in category_random_posts %}
+    <p style="margin: 15px;">Похожие статьи:</p>
+    {% for post in category_random_posts %}
+    <div style="display: inline-block; justify-content: flex-start;">
         <a href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black">
             <div class="item_card" style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
-                {% if post.image %}
-                <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
-                {% endif %}
+                <div style="width:300px; height:150px;">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
+                    {% endif %}
+                </div>
                 <p style="margin: 15px;">{{ post.title }}</p>
                 <p style="margin: 15px;">{{ post.briefdescription }}</p>
                 <p style="margin: 15px;">Likes: {{ post.likes }}</p>
                 <p style="margin: 15px;">Views: {{ post.views }}</p>
             </div>
         </a>
-        {% endfor %}
     </div>
+    {% endfor %}
     {% endif %}
 {% endblock %}

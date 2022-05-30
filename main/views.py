@@ -15,7 +15,7 @@ from .models import Category, Post, Comment, Emails, AnswerComment, Like
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
 from .serializers import CategorySerializer, PostSerializer, PostsAllSerializer, CategoryDetailSerializer, \
-    PostDetailedSerializer
+    PostDetailedSerializer, SimilarRandomPostsSerializer
 
 
 def start_page(request):
@@ -43,12 +43,7 @@ def post_detail(request, id):
     category_id = post.category_id
 
     'Показ 3-ёх случайных похожих статей'
-    category_posts = list(Post.objects.filter(category_id=category_id))
-    category_posts.remove(post)
-    category_posts_count = len(category_posts)
-    if category_posts_count > 3:
-        category_posts_count = 3
-    category_random_posts = random.sample(category_posts, category_posts_count)
+    category_random_posts = Post.objects.filter(category_id=category_id).exclude(id=id).order_by('?')[:3]
 
     'Счётчик просмотров'
     if request.method == 'GET':
@@ -184,7 +179,7 @@ class PostsAllList(generics.ListAPIView):
 
 
 class PostView(generics.RetrieveAPIView):
-    """информация о посте без коммнетарием и лайков"""
+    """информация о посте без комментариев и лайков"""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -201,4 +196,13 @@ class PostDetailedView(generics.RetrieveAPIView):
     serializer_class = PostDetailedSerializer
 
 
+class PopularPostsList(generics.ListAPIView):
+    """список популярных постов"""
+    queryset = Post.objects.all().order_by('-views', '-likes')
+    serializer_class = PostsAllSerializer
 
+
+class SimilarRandomPosts(generics.RetrieveAPIView):
+    """пост с 3-мя случайными похожими постами"""
+    queryset = Post.objects.all()
+    serializer_class = SimilarRandomPostsSerializer

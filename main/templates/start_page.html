@@ -37,23 +37,25 @@
     </div>
 
     {% block content %}
-    <div style="display: flex; justify-content: flex-start">
-        {% for post in posts %}
+    {% for post in posts %}
+    <div style="display: inline-block; justify-content: flex-start;">
         <a href="{{ post.get_absolute_url }}" style="text-decoration: none; color: black">
-            <div class="item_card" style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
-                {% if post.image %}
-                <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
-                {% endif %}
+            <div style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
+                <div style="width:300px; height:150px;">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="" style="width:300px; height:150px">
+                    {% endif %}
+                </div>
                 <p style="margin: 15px;">{{ post.title }}</p>
                 <p style="margin: 15px;">{{ post.briefdescription }}</p>
                 <p style="margin: 15px;">Likes: {{ post.likes }}</p>
                 <p style="margin: 15px;">Views: {{ post.views }}</p>
             </div>
         </a>
-        {% endfor %}
     </div>
+    {% endfor %}
     <div>
-        <form  style="background-color: grey" action="" method="POST">
+        <form style="background-color: grey" action="" method="POST">
             {% csrf_token %}
             <h3>Хочу получать уведомления о новых постах ITEC</h3>
             {{ form.as_p }}

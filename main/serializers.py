@@ -70,3 +70,17 @@ class PostDetailedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['title', 'description', 'created', 'image', 'views', 'comment_set']
+
+
+class SimilarRandomPostsSerializer(serializers.ModelSerializer):
+    """сериализатор для вывода конкретного поста и 3-ёх случайных похожих на него постов"""
+    similar_posts_set = serializers.SerializerMethodField('get_three_similar_random_posts')
+
+    def get_three_similar_random_posts(self, post):
+        qs = Post.objects.filter(category_id=post.category_id).exclude(id=post.id).order_by('?')[:3]
+        serializer = PostSerializer(instance=qs, many=True)
+        return serializer.data
+
+    class Meta:
+        model = Post
+        fields = ['title', 'description', 'created', 'image', 'views', 'similar_posts_set']
