@@ -1,16 +1,14 @@
-import random
-
 import generics as generics
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 # from rest_framework.views import APIView
 from rest_framework import generics
 
 from account.models import BlogUser
 from .forms import CommentForm, EmailsForm, AnswerCommentForm
-from .models import Category, Post, Comment, Emails, AnswerComment, Like
+from .models import Category, Post, Comment, Emails, AnswerComment, View, Like
 # from .serializers import CategoryModelSerializer, PostModelSerializer, CommentModelSerializer
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
@@ -41,39 +39,41 @@ def post_detail(request, id):
     post = post_info[0]
     post_additional_images = post.postadditionalimage_set.all()
     category_id = post.category_id
+    user = request.environ['HTTP_COOKIE']
 
     'Показ 3-ёх случайных похожих статей'
     category_random_posts = Post.objects.filter(category_id=category_id).exclude(id=id).order_by('?')[:3]
 
     'Счётчик просмотров'
     if request.method == 'GET':
-        post.views += 1
-
-        'Счётчик лайков'
-        if request.GET.get('Likes') == 'Likes':
-            if request.user.username:
-                user = BlogUser.objects.get(username=request.user.username)
-                like = Like.objects.filter(post_id=id, category_id=category_id, user=user)
-                if len(like) > 0:
-                    like.delete()
-                    post.likes -= 1
-                else:
-                    like = Like(post_id=id, category_id=category_id, user=user)
-                    like.save()
-                    post.likes += 1
-                post_info.update(likes=post.likes)
-            post.views -= 1
-
-        post_info.update(views=post.views)
+        view = View.objects.filter(post_id=id, user=user)
+        if len(view) == 0:
+            view = View(post_id=id, category_id=category_id, user=user)
+            view.save()
+            post.views += 1
+            post_info.update(views=post.views)
 
     form = CommentForm()
     comments = Comment.objects.filter(is_publish='True', post_id=id)
     answer_comments = AnswerComment.objects.filter(is_publish='True')
 
     if request.method == 'POST':
-        comment = Comment(text=request.POST.get("text"), post_id=id)
-        comment.save()
-        return render(request, 'success_add_comment.html')
+        'Счётчик лайков'
+        if request.POST.get('Likes') == 'Likes':
+            like = Like.objects.filter(post_id=id, user=user)
+            if len(like) > 0:
+                like.delete()
+                post.likes -= 1
+            else:
+                like = Like(post_id=id, category_id=category_id, user=user)
+                like.save()
+                post.likes += 1
+            post_info.update(likes=post.likes)
+            return redirect(post.get_absolute_url())
+        else:
+            comment = Comment(text=request.POST.get("text"), post_id=id)
+            comment.save()
+            return render(request, 'success_add_comment.html')
     context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form,
                'comments': comments, 'answer_comments': answer_comments, 'category_random_posts': category_random_posts}
     return render(request, 'post_detail.html', context)

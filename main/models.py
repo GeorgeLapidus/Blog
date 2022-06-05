@@ -94,10 +94,24 @@ class Emails(models.Model):
         return self.email
 
 
+class View(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Статья')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
+    user = models.CharField(max_length=200, verbose_name="Пользователь")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+
+    class Meta:
+        verbose_name = 'Просмотр'
+        verbose_name_plural = 'Просмотры'
+
+    def __str__(self):
+        return "id: " + str(self.id)
+
+
 class Like(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='Статья')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="Категория")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.CharField(max_length=200, verbose_name="Пользователь")
     created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
     class Meta:

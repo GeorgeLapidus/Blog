@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from main.models import Category, Post, Comment, PostAdditionalImage, Emails, AnswerComment, Like
+from main.models import Category, Post, Comment, PostAdditionalImage, Emails, AnswerComment
 
 
 class PostAdditionalImageInline(admin.TabularInline):
@@ -11,13 +11,10 @@ class PostAdditionalImageInline(admin.TabularInline):
 
 class PostAdmin(admin.ModelAdmin):
     """Отредактированный для админки класс Post с возможностью прикреплять дополнительные изображения"""
-    list_display = ('title', 'category', 'description', 'briefdescription', 'likes', 'views', 'created', 'updated', 'image', 'author')
+    fields = ('title', 'category', 'description', 'briefdescription', 'image', 'author')
+    list_display = ('title', 'category', 'description', 'briefdescription', 'likes', 'views', 'created', 'updated',
+                    'image', 'author')
     inlines = (PostAdditionalImageInline,)
-
-
-class LikeAdmin(admin.ModelAdmin):
-    """Отредактированный для админки класс Like для отображения нужных полей"""
-    list_display = ('post', 'category', 'user', 'created', 'id')
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -33,9 +30,21 @@ class AnswerCommentAdmin(admin.ModelAdmin):
     list_editable = ('is_publish',)
 
 
+# from main.models import View, Like
+# class ViewAdmin(admin.ModelAdmin):
+#     """Отредактированный для админки класс View для отображения нужных полей"""
+#     list_display = ('post', 'category', 'user', 'created', 'id')
+#
+#
+# class LikeAdmin(admin.ModelAdmin):
+#     """Отредактированный для админки класс Like для отображения нужных полей"""
+#     list_display = ('post', 'category', 'user', 'created', 'id')
+
+
 admin.site.register(Category)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(AnswerComment, AnswerCommentAdmin)
 admin.site.register(Emails)
-admin.site.register(Like, LikeAdmin)
+# admin.site.register(View, ViewAdmin)
+# admin.site.register(Like, LikeAdmin)

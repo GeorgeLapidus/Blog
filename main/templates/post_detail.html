@@ -9,7 +9,7 @@
         </div>
         <p style="margin: 15px;">{{ post.title }}</p>
         <p style="margin: 15px;">{{ post.description }}</p>
-        <form action="" method="GET" style="margin: 15px;">
+        <form action="" method="POST" style="margin: 15px;">
             {% csrf_token %}
             <input type="submit" value="Likes" name="Likes"/> {{ post.likes }}
         </form>
