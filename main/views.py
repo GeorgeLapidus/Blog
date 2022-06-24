@@ -47,7 +47,7 @@ def post_detail(request, id):
     'Счётчик просмотров'
     if request.method == 'GET':
         view = View.objects.filter(post_id=id, user=user)
-        if len(view) == 0:
+        if not view:
             view = View(post_id=id, category_id=category_id, user=user)
             view.save()
             post.views += 1
@@ -59,9 +59,9 @@ def post_detail(request, id):
 
     if request.method == 'POST':
         'Счётчик лайков'
-        if request.POST.get('Likes') == 'Likes':
+        if request.POST.get('Likes'):
             like = Like.objects.filter(post_id=id, user=user)
-            if len(like) > 0:
+            if like:
                 like.delete()
                 post.likes -= 1
             else:
@@ -69,11 +69,10 @@ def post_detail(request, id):
                 like.save()
                 post.likes += 1
             post_info.update(likes=post.likes)
-            return redirect(post.get_absolute_url())
         else:
             comment = Comment(text=request.POST.get("text"), post_id=id)
             comment.save()
-            return render(request, 'success_add_comment.html')
+        return redirect(post.get_absolute_url())
     context = {'categories': categories, 'post': post, 'post_additional_images': post_additional_images, 'form': form,
                'comments': comments, 'answer_comments': answer_comments, 'category_random_posts': category_random_posts}
     return render(request, 'post_detail.html', context)
@@ -94,7 +93,7 @@ def send_bot_message(sender, **kwargs):
         'Оставили комментарий',
         'Вам оставили комментарий на БЛОГ ITECH http://127.0.0.1:8000/',
         'python.project2012@gmail.com',
-        ['python.project2012@gmail.com', 'shvedovska_vera@mail.ru'],
+        ['python.project2012@gmail.com'],
         fail_silently=False)
     print("Письмо отправлено с помощью сигнала - оставили комментарий")
 
@@ -131,7 +130,9 @@ def answer_comment(request, id):
     if request.method == 'POST':
         answer_comment = AnswerComment(text=request.POST.get("text"), comment_id=id)
         answer_comment.save()
-        return render(request, 'success_add_comment.html')
+        comment = Comment.objects.get(id=answer_comment.comment_id)
+        post = Post.objects.get(id=comment.post_id)
+        return redirect(post.get_absolute_url())
     context = {'form': form, 'comment': comment}
     return render(request, "answer_comment.html", context)
 
@@ -145,7 +146,7 @@ def send_message_about_answer(sender, **kwargs):
         'Оставили ответ на комментарий',
         'Вам оставили ответ на комментарий на БЛОГ ITECH http://127.0.0.1:8000/',
         'python.project2012@gmail.com',
-        ['python.project2012@gmail.com', 'shvedovska_vera@mail.ru'],
+        ['python.project2012@gmail.com'],
         fail_silently=False)
     print("Письмо отправлено с помощью сигнала - ответ на комментарий")
 

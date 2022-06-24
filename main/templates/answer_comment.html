@@ -1,14 +1,17 @@
 {% extends "start_page.html" %}
+{% load static %}
 
 {% block content %}
+<script type="text/javascript" src="{% static 'scripts.js' %}"></script>
+
 <p><h3> Оставьте здесь Ваш ответ на:</h3></p>
     <p><h4>Комментарий: {{ comment.text }}</h4></p>
         <p>{{ comment.date_created }}</p>
 
-    <form action="" method="post">
+    <form action="" method="post" name="comment_form" onsubmit="return validate_comment_form ( )">
         {% csrf_token %}
-        {{form.as_p}}
-        <button> Отправить</button>
+        {{ form.as_p }}
+        <button>Отправить</button>
     </form>
 
 {% endblock %}

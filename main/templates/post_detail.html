@@ -1,6 +1,9 @@
 {% extends "start_page.html" %}
+{% load static %}
 
 {% block content %}
+    <script type="text/javascript" src="{% static 'scripts.js' %}"></script>
+
     <div style="width: 300px; height: 300px; margin: 20px; background: darkkhaki;">
         <div style="width:300px; height:150px;">
             {% if post.image %}
@@ -39,11 +42,12 @@
 
     {% endfor %}
 
-        <form action="" method="post">
+        <form action="" method="post" name="comment_form" onsubmit="return validate_comment_form ( )">
             {% csrf_token %}
             {{ form.as_p }}
-            <button> Отправить</button>
+            <button>Отправить</button>
         </form>
+
 </div>
 
     {% if category_random_posts %}
